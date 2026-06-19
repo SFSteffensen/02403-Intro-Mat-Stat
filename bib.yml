@@ -1,0 +1,197 @@
+stochastic-matrix:
+    type: Web
+    title: Stochastic matrix
+    author: Wikipedia
+    date: "2025-05-05" # Source written date
+    url:
+        value: https://en.wikipedia.org/wiki/Stochastic_matrix
+        date: "2026-04-14" # Last access date
+    language: en
+    parent:
+        type: Web
+        title: Wikipedia, The Free Encyclopedia
+        publisher: Wikimedia Foundation
+
+haveliwala-kamvar:
+    type: Article
+    title: The Second Eigenvalue of the Google Matrix
+    author: ["Haveliwala, Taher H.", "Kamvar, Sepandar D."]
+    date: 2003
+    publisher: Stanford University
+    url:
+        value: https://nlp.stanford.edu/pubs/secondeigenvalue.pdf
+        date: "2026-04-24"
+    language: en
+    serial-number:
+        type: Technical Report
+
+langville-meyer:
+  type: book
+  title: 'Google''s PageRank and Beyond: The Science of Search Engine Rankings'
+  author:
+  - Langville, Amy N.
+  - Meyer, Carl D.
+  date: 2006
+  publisher: Princeton University Press
+  url:
+    value: http://www.jstor.org/stable/j.ctt7t8z9
+    date: 2026-04-28
+  serial-number:
+    isbn: '9780691122021'
+  abstract: ' Why doesn''t your home page appear on the first page of search results, even when you query your own name? How do other web pages always appear at the top? What creates these powerful rankings? And how? The first book ever about the science of web page rankings, Google''s PageRank and Beyond supplies the answers to these and other questions and more. The book serves two very different audiences: the curious science reader and the technical computational reader. The chapters build in mathematical sophistication, so that the first five are accessible to the general academic reader. While other chapters are much more mathematical in nature, each one contains something for both audiences. For example, the authors include entertaining asides such as how search engines make money and how the Great Firewall of China influences research. The book includes an extensive background chapter designed to help readers learn more about the mathematics of search engines, and it contains several MATLAB codes and links to sample web data sets. The philosophy throughout is to encourage readers to experiment with the ideas and algorithms in the text. Any business seriously interested in improving its rankings in the major search engines can benefit from the clear examples, sample code, and list of resources provided. Many illustrative examples and entertaining asides MATLAB code Accessible and informal style Complete and self-contained section for mathematics review '
+
+    
+bryan-leise:
+    type: Article
+    title: "The $25,000,000,000 Eigenvector: The Linear Algebra Behind Google"
+    author: ["Bryan, Kurt", "Leise, Tanya"]
+    date: 2006
+    parent:
+        type: Periodical
+        title: SIAM Review
+        volume: 48
+        issue: 3
+    page-range: 569-581
+    url:
+        value: https://www.rose-hulman.edu/~bryan/googleFinalVersionFixed.pdf
+        date: "2026-04-24"
+    language: en
+
+geev-lapack-benchmark:
+  title: "LAPACK Benchmark"
+  type: web
+  author: "Blackford, Susan"
+  date: 1999
+  url:
+    value: "https://www.netlib.org/lapack/lug/node71.html"
+    date: 2026-04-25
+
+brin-page:
+    type: Article
+    title: "The Anatomy of a Large-Scale Hypertextual Web Search Engine"
+    author: ["Brin, Sergey", "Page, Lawrence"]
+    date: 1998
+    url:
+        value: "http://infolab.stanford.edu/~backrub/google.html"
+        date: "2026-04-26"
+    language: en
+
+mathematics-1a:
+  type: book
+  title: "Kompendium til kurset Mat 1a"
+  author: "Beelen, Peter"
+  organization: Danmarks Tekniske Universitet
+  publisher: Polyteknisk Forlag
+  edition: 2
+  date: 2025
+  serial-number:
+    isbn: "9788750208389"
+  page-total: 279
+  url:
+    value: https://01001.compute.dtu.dk/_assets/mat1a_l%C3%A6rebog_v2025.pdf
+    date: 2026-04
+  page-range: 94-241
+  language: da
+
+mathematics-1b:
+  type: book
+  title: "Mathematics 1b Functions of several variables"
+  author: ["Christensen, Ole", "Lemvig, Jakob"]
+  organization: Danmarks Tekniske Universitet Compute
+  publisher: Polyteknisk Forlag 
+  edition: 2
+  date: 2026-01
+  page-total: 230
+  url:
+    value: https://01002.compute.dtu.dk/_assets/textbook_mat1b_en.pdf
+    date: 2026-04
+  language: da
+  serial-number:
+    isbn: 9788771253498
+
+geyer2011introduction:
+  type: chapter
+  title: Introduction to Markov Chain Monte Carlo
+  author: Geyer, Charles J.
+  date: 2011-05
+  page-range: '22'
+  url: http://dx.doi.org/10.1201/b10905-2
+  serial-number:
+    doi: 10.1201/b10905-2
+    isbn: '9780429138508'
+  parent:
+    type: book
+    title: Handbook of Markov Chain Monte Carlo
+    publisher: Chapman, Hall/CRC
+    issue: 45
+
+
+sericola2013markov:
+  type: book
+  title: 'Markov chains: theory and applications'
+  author: Sericola, Bruno
+  date: 2013
+  publisher: John Wiley & Sons
+  serial-number:
+    doi: 10.1002/9781118731543.ch1
+
+Discrete_textbook:
+  type: book
+  title: "Discrete Mathematics and Its Applications: 2025 Release ISE, 9th Edition"
+  author: ["Kenneth Rosen"]
+  publisher: McGraw Hill LLC
+  edition: 9
+  page-range: 634-727
+  language: en
+  serial-number:
+    isbn: "978-1-266-19154-1"
+    doi: 10.1201/chdismthapp 
+
+cormen2022introduction:
+  type: book
+  title: Introduction to algorithms
+  author:
+  - Cormen, Thomas H
+  - Leiserson, Charles E
+  - Rivest, Ronald L
+  - Stein, Clifford
+  date: 2022
+  publisher: MIT press
+
+katayun2007kamdin:
+  type: Article 
+  title: Jordan Normal Form 
+  author: 
+    - Kamdin, Katayun 
+  date: 2007 
+  url: 
+    value: https://math.uchicago.edu/~may/VIGRE/VIGRE2007/REUPapers/FINALAPP/Kamdin.pdf 
+    date: 2026-04
+
+
+wikiPerronFrobeniustheorem:
+  type: misc
+  title: '{Perron–Frobenius theorem} {W}ikipedia{,} The Free Encyclopedia'
+  author: Wikipedia
+  date: 2026-04
+  url:
+    value: https://en.wikipedia.org/wiki/Perron–Frobenius_theorem
+    date: 2026-04-30
+
+NetBLAS:
+  title: "BLAS (Basic Linear Algebra Subprograms)"
+  url: 
+    value: https://www.netlib.org/blas/
+    date: 2026-05-01
+  type: web
+  
+
+SIMD:
+  type: misc
+  title: 'Single instruction, multiple data'
+  author: Wikipedia
+  date: 2026-03-20
+  url:
+    value: https://en.wikipedia.org/wiki/Single_instruction,_multiple_data
+    date: 2026-05-01
+    
