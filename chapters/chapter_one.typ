@@ -97,10 +97,10 @@ run.
 
     table.cell(colspan: 4, fill: luma(245))[*Sample size / power*],
     [$n$ for CI of a mean (width $=$ ME)],
-      $n = (z_(1-alpha/2) sigma\/"ME")^2$ (3.63),
+      [$n = (z_(1-alpha/2) sigma\/"ME")^2$ (3.63)],
       [—], [$Z$],
     [$n$ for a mean, power $1-beta$],
-      $n = ((z_(1-beta)+z_(1-alpha/2))sigma\/(mu_0-mu_1))^2$ (3.65),
+      [$n = ((z_(1-beta)+z_(1-alpha/2))sigma\/(mu_0-mu_1))^2$ (3.65)],
       [—], [$Z$],
     [$n$ for CI of a proportion],
       [$n = p(1-p)(z_(1-alpha/2)\/"ME")^2$; worst case $p = 1/2$ (7.13)],
