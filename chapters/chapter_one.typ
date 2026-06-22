@@ -100,7 +100,7 @@ run.
       [$n = (z_(1-alpha/2) sigma\/"ME")^2$ (3.63)],
       [—], [$Z$],
     [$n$ for a mean, power $1-beta$],
-      [$n = ((z_(1-beta)+z_(1-alpha/2))sigma\/(mu_0-mu_1))^2$ (3.65)],
+      [$n = (((z_(1-beta)+z_(1-alpha/2))sigma)/(mu_0-mu_1))^2$ (3.65)],
       [—], [$Z$],
     [$n$ for CI of a proportion],
       [$n = p(1-p)(z_(1-alpha/2)\/"ME")^2$; worst case $p = 1/2$ (7.13)],
@@ -320,8 +320,6 @@ as values with a frequency list (or summarised to its statistics first).
   [*2.58 Covariance* between two random variables $X$ and $Y$.],
   $ "Cov"(X, Y) = "E"[(X - "E"[X])(Y - "E"[Y])] $,
   [—],
-  [From paired data: `2-Var Stats`, then $r times S x times S y$ (as 1.18). From a
-   joint table: compute $"E"[X Y] - "E"[X]"E"[Y]$ by hand.],
 )
 
 == Distributions
@@ -1066,11 +1064,15 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
    $z_(1-alpha/2)$ from a $Z$-table.],
 
   [*7.18 Level $alpha$ two-sample proportion test.* $H_0: p_1 = p_2$ vs.
-   $H_1: p_1 eq.not p_2$.],
-  $ p"-value" = 2 dot P(Z > |z_("obs")|), quad Z tilde N(0, 1^2) $,
+   $H_1: p_1 eq.not p_2$. Use pooled $hat(p)$ in the SE — not each group's own
+   $hat(p)_i$.],
+  $ hat(p) = (x_1 + x_2)/(n_1 + n_2), quad
+    z_("obs") = (hat(p)_1 - hat(p)_2)/sqrt(hat(p)(1-hat(p))(1/n_1 + 1/n_2)) \
+    p"-value" = 2 dot P(Z > |z_("obs")|) $,
   [—],
-  [Pool $hat(p) = frac(x_1 + x_2, n_1 + n_2)$; key $z_("obs")$ by hand; $p$ from a
-   $Z$-table.],
+  [$hat(p)_i = x_i\/n_i$; pool: $hat(p) = (x_1+x_2)\/(n_1+n_2)$; key $z_("obs")$
+   (`[√]`); compare $|z_("obs")|$ with $z_(1-alpha/2)$ from a $Z$-table.],
+   
 
   [*7.19 Expected cell count* for $chi^2$-tests. Contingency table ($r times c$): expected count for cell $(i,j)$. Goodness-of-fit ($k$ categories): expected count for category $i$.],
   $ e_(i j) = (("row" i " total") times ("col" j " total"))/n, quad
@@ -1139,21 +1141,25 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   [Once MSE known, key $t_(1-alpha/2) times sqrt(frac(2 "MSE", m))$; $t$ from a
    table.],
 
-  [*8.20 Two-way ANOVA variation decomposition*
-   ($"SST" = "SSE" + "SS(Tr)" + "SS(Bl)"$).],
-  $ underbrace(sum_(i=1)^k sum_(j=1)^l (y_(i j) - hat(mu))^2, "SST")
+  [*8.20 Two-way ANOVA model and variation decomposition*
+   ($"SST" = "SSE" + "SS(Tr)" + "SS(Bl)"$).
+   
+   *Model assumption:* $epsilon_(i j)$ independent
+   $=> "Cov"(Y_(i j), Y_(m k)) = 0$ for all $(i,j) eq.not (m,k)$.],
+  [$ underbrace(sum_(i=1)^k sum_(j=1)^l (y_(i j) - hat(mu))^2, "SST")
     = underbrace(sum_(i=1)^k sum_(j=1)^l
         (y_(i j) - hat(alpha)_i - hat(beta)_j - hat(mu))^2, "SSE") \
     + underbrace(l dot sum_(i=1)^k hat(alpha)_i^2, "SS(Tr)")
-    + underbrace(k dot sum_(j=1)^l hat(beta)_j^2, "SS(Bl)") $,
+    + underbrace(k dot sum_(j=1)^l hat(beta)_j^2, "SS(Bl)") $],
   [—],
-  [Compute the cell/row/column means (`1-Var Stats`), then the sums of squares by
-   hand.],
+  [SS values are always given on the exam — read from the ANOVA table, do not
+   compute from raw data.],
 
-  [*8.22 Two-way ANOVA tests* (treatments and blocks).
-   $H_(0,"Tr"): alpha_i = 0$; $H_(0,"Bl"): beta_j = 0$.],
-  $ F_("Tr") &= (("SS(Tr)")/(k-1))/(("SSE")/((k-1)(l-1))) \
-    F_("Bl") &= (("SS(Bl)")/(l-1))/(("SSE")/((k-1)(l-1))) $,
+  [*8.22 Two-way ANOVA tests.*
+   $"MSE" = "SSE"\/((k-1)(l-1)) = hat(sigma)^2$ — the exam expresses the
+   denominator as $hat(sigma)^2$ directly.],
+  $ F_("Tr") = ("SS(Tr)"\/(k-1))/hat(sigma)^2 \
+    F_("Bl") = ("SS(Bl)"\/(l-1))/hat(sigma)^2 $,
   [#cmd("D = pd.DataFrame({'y': y, 'g1': g1, 'g2': g2})\nmodel = smf.ols('y ~ C(g1) + C(g2)', data=D).fit()\nanova_results = sm.stats.anova_lm(model, typ=2)")],
   [Key $F_("Tr"), F_("Bl")$ from the sums of squares; $F$-quantiles from a table.],
 )
@@ -1216,13 +1222,15 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   cmd("smf.ols('y ~ x1 + x2', data=D).fit()"),
   [Not available (no matrix mode).],
 
-  [*9.2 Least-squares estimator and projection (hat) matrix.* $bold(H)$ projects
-   $bold(Y)$ onto the column space of $bold(X)$; the fitted values are
-   $hat(bold(Y)) = bold(H) bold(Y)$.],
+  [*9.2 Least-squares estimator.* $hat(bold(beta))$ has exactly $p$ elements —
+   one per column of $bold(X)$ (count columns to get $p$). Chosen to minimise
+   the sum of squared residuals SSE.],
   $ hat(bold(beta)) = (bold(X)^T bold(X))^(-1) bold(X)^T bold(Y), quad
+    hat(bold(Y)) = bold(H) bold(Y), quad
     bold(H) = bold(X)(bold(X)^T bold(X))^(-1) bold(X)^T $,
-  cmd("H = X @ np.linalg.inv(X.T @ X) @ X.T"),
-  [Not available.],
+  [—],
+  [Count columns of $bold(X)$ $= p$ $=$ number of $hat(beta)$ elements.],
+
 
   [*9.3 Properties of $bold(H)$.* Symmetric and idempotent. $bold(I)-bold(H)$ is
    also a projection (onto the residual space). The trace equals the rank equals
@@ -1233,15 +1241,11 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   [—],
   [Conceptual — nothing to compute.],
 
-  [*9.4 Residuals and the variance estimate.* The residual sum of squares is a
-   quadratic form in $bold(I)-bold(H)$; dividing by its df $n-p$ gives the
-   unbiased $hat(sigma)^2$.],
-  $ bold(e) = (bold(I) - bold(H)) bold(Y), quad
-    "SSE" = bold(Y)^T (bold(I) - bold(H)) bold(Y), quad
-    hat(sigma)^2 = ("SSE")/(n - p) $,
-  cmd("SSE = y @ (np.eye(n) - H) @ y"),
-  [Key $hat(sigma)^2 = "SSE"\/(n-p)$ once SSE is known. Recognise
-   $bold(Y)^T(bold(I)-bold(H))bold(Y) = (n-p)hat(sigma)^2$.],
+  [*9.4 Key identity — always true.*],
+  $ bold(Y)^T (bold(I) - bold(H)) bold(Y) = "SSE" = (n - p) hat(sigma)^2 $,
+  [—],
+  [$p$ = columns of $bold(X)$. So if $bold(X)$ has 3 columns:
+   $Q = (n-3)hat(sigma)^2$.],
 
   [*9.5 Distribution of the parameter estimates.* $hat(bold(beta))$ is normal;
    the standard error of $hat(beta)_j$ is $hat(sigma)$ times the root of the
@@ -1268,13 +1272,14 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   [—],
   [df numerator $= p - p_0$ (rank difference), df denominator $= n - p$.],
 
-  [*9.8 Equivalence of parametrisations.* If two design matrices span the same
-   column space, $bold(H)$ is identical, so the fitted values and $hat(sigma)^2$
-   agree — but $hat(bold(beta))$ (and their interpretation) may differ.],
-  $ bold(H) = bold(H)_2 quad => quad hat(bold(Y)) = hat(bold(Y))_2, space
-    hat(sigma)^2 = hat(sigma)_2^2; quad hat(bold(beta)) eq.not hat(bold(beta))_2 $,
+  [*9.8 Same $bold(H)$ — what agrees and what may differ.*],
+  $ bold(H) = bold(H)_2 quad => quad
+    hat(bold(Y)) " identical", quad
+    hat(sigma)^2 " identical", quad
+    hat(bold(beta)) " may differ" $,
   [—],
-  [Conceptual.],
+  [Fitted values $hat(bold(Y))$ and variance $hat(sigma)^2$ are the same.
+   Parameter estimates $hat(bold(beta))$ are *not* necessarily the same.],
 
   [*9.9 One-way ANOVA as projections.* $bold(H)$ is the group-mean projector
    (block-diagonal, rank $k$); $bold(H)_0 = (1\/n) bold(E)_(n,n)$ is the grand-mean
@@ -1320,3 +1325,44 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
 / IQR: Inter Quartile Range
 / LSD: Least Significant Difference
 / pdf: probability density function
+
+
+== Functions of normal RVs — exam recipes (Q29/Q30 type)
+
+These questions never require computation — only rewriting an expression into a
+known $t$ or $F$ template, reading off the df, and doing algebra. Three facts:
+
+#st(
+  [*Square of a standard normal.*], $ N(0,1)^2 = chi^2(1) $, [—],
+  [Collapse any squared $N(0,1)$ into $chi^2(1)$.],
+
+  [*Pooling.* Independent $chi^2$ add their df.],
+  $ chi^2(nu_1) + chi^2(nu_2) tilde chi^2(nu_1 + nu_2) $, [—],
+  [e.g. $X^2 + Y$ with $Y tilde chi^2(5)$ gives $chi^2(6)$.],
+
+  [*$F$ from two $chi^2$* (2.96) and its mean (2.101).],
+  $ (U\/nu_1)/(V\/nu_2) tilde F(nu_1, nu_2), quad E[F] = nu_2/(nu_2 - 2) $,
+  [—],
+  [To hit an $F$, scale each $chi^2$ by *its own* df.],
+
+  [*$t$ template* (2.87).],
+  $ Z/sqrt(W\/nu) tilde t(nu), quad W tilde chi^2(nu) $, [—],
+  [If a $nu$ is missing inside the root, factor it out: a stray $sqrt(nu)$
+   moves to the other side of the inequality.],
+)
+
+*Worked — mean of a $chi^2$ ratio (Q29).* $Y = Y_1\/(X^2 + Y_2)$, with
+$Y_1 tilde chi^2(5)$, $X^2 + Y_2 tilde chi^2(6)$. Build the $F$:
+$ F = (Y_1\/5)/((X^2+Y_2)\/6) = 6/5 dot Y quad => quad Y = 5/6 F, quad
+  E[Y] = 5/6 dot 6/(6-2) = 5/4. $
+
+*Worked — a quantile (Q30).* $P(X\/sqrt(Y_1) < a) = 0.95$, $Y_1 tilde chi^2(5)$.
+Factor the root: $X\/sqrt(Y_1) = (1\/sqrt(5)) dot X\/sqrt(Y_1\/5) = (1\/sqrt(5)) T$
+with $T tilde t(5)$. Then $P(T < a sqrt(5)) = 0.95 => a = t_(0.95)(5)\/sqrt(5)$.
+
+// TODO: print an print(fit.summary(slim=True)) table, and replace values with var names!
+
+// TODO: Make different types of plot and examples on how to generate stochastic variables for them and a general explanation.
+
+// TODO: add a more direct way to solve something like Question VII.3 (13). it makes no sense notation-wise how you compare 2 seemingly seperate and random functions to get an answer... formula should be something like: $z_("obs") = frac((p_1 - p_2) - 0, sqrt(p(1 - p)(1/n_1 + 1/n_2)))$
+
