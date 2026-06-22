@@ -887,7 +887,7 @@ Functions in `scipy.stats.f`:
   [*4.10 Two-sample CI for a feature comparison $theta_1 - theta_2$ by parametric
    bootstrap.*],
   [1. Simulate $k$ sets of 2 samples.\
-   2. Compute $hat(theta)^*_(x k) - hat(theta)^*_(y k)$.\
+   2. Compute $hat(theta)^*_(x k) - hat(theta)^*_(y k)$.\We have our null-hupothesis of there being no differene. Since both p-values are greater than 0.05, we can accept that hypothesis.
    3. CI: $[q^*_(100(alpha/2)%), q^*_(100(1-alpha/2)%)]$],
   [—],
   [Not feasible — requires simulation.],
@@ -1125,7 +1125,7 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
       sqrt(("SSE")/(n-k)(1/n_i + 1/n_j)) $,
   [—],
   [With MSE and the group sizes, key the interval by hand (`[√]`); $t$ from a table
-   (use $alpha\/M$).],
+   (use $alpha\/M$).], // The TI explanations here are fuckjing cancer and need to be fixed
 
   [*8.10 Post-hoc pairwise hypothesis tests.* $H_0: mu_i = mu_j$ vs.
    $H_1: mu_i eq.not mu_j$. Test $M = k(k-1)/2$ times with
@@ -1156,7 +1156,7 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
    compute from raw data.],
 
   [*8.22 Two-way ANOVA tests.*
-   $"MSE" = "SSE"\/((k-1)(l-1)) = hat(sigma)^2$ — the exam expresses the
+   $"MSE" = "SSE"/((k-1)(l-1)) = hat(sigma)^2$ — the exam expresses the
    denominator as $hat(sigma)^2$ directly.],
   $ F_("Tr") = ("SS(Tr)"\/(k-1))/hat(sigma)^2 \
     F_("Bl") = ("SS(Bl)"\/(l-1))/hat(sigma)^2 $,
@@ -1210,6 +1210,8 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
     [Total], $n-1$, [SST], [], [], [],
   )
 ]
+
+// TODO: display how each fucking cell get's calculated by hand
 
 = The general linear model (GLM)
 
@@ -1484,3 +1486,9 @@ zobs, pval = smprop.proportions_ztest([x1, x2], [n1, n2], value=0)
 
 The denominator uses the *pooled* $hat(p)$ — not the individual $hat(p)_i$ — because $H_0$ asserts a common true proportion. This differs from the CI formula (Thm 7.15), which uses each group's own $hat(p)_i$.
 
+
+// TODO: Docs for all the python functions.
+
+// TODO: Better explanations
+
+// TODO: All the plots and explanations
