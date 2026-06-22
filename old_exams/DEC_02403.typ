@@ -179,7 +179,7 @@ _Continue on page 5_
 Some data has been obtained for which we simply call the observed values "y" and "x". The data is visualized in the scatter plot below.
 
 #v(0.5em)
-#align(center)[#image("figures/1.png")]
+#align(center)[#image("../figures/1.png")]
 #v(0.5em)
 
 The following information about the data is provided:
@@ -271,7 +271,7 @@ $
 In order to check the model assumptions the following plots were produced:
 
 #v(0.5em)
-#align(center)[#image("figures/2.png")]
+#align(center)[#image("../figures/2.png")]
 #v(0.5em)
 
 Which of the following statements is correct?
@@ -362,7 +362,7 @@ from notes we know that it is a $chi^2$ distribution with degrees of freedom equ
 The researchers proceed to perform model validation (i.e., model checking). They produce the diagnostic plots presented below:
 
 #v(0.5em)
-#align(center)[#image("figures/3.png")]
+#align(center)[#image("../figures/3.png")]
 #v(0.5em)
 
 Which of the following statements is correct (all arguments must be true)?
@@ -438,7 +438,7 @@ _Continue on page 13_
 150 observations of a discrete stochastic variable are simulated in Python and the resulting values are visualized in the following empirical cumulative distribution (ecdf) plot:
 
 #v(0.5em)
-#align(center)[#image("figures/4.png")]
+#align(center)[#image("../figures/4.png")]
 #v(0.5em)
 
 #question-heading[Question VI.1 (10)]
@@ -862,7 +862,7 @@ plt.show()
 ]
 
 #v(0.5em)
-#align(center)[#image("figures/5.png")]
+#align(center)[#image("../figures/5.png")]
 #v(0.5em)
 
 #question-heading[Question XI.1 (21)]
