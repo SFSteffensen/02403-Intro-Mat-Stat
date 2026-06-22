@@ -1186,6 +1186,8 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   )
 ]
 
+// TODO: 2nd one-way ANOVA table but where each cell contains all different ways to compute. 
+
 == Two-way ANOVA table
 
 #block(width: 100%)[
@@ -1211,7 +1213,8 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   )
 ]
 
-// TODO: display how each fucking cell get's calculated by hand
+// TODO: 2nd 2-way ANOVA table but where each cell contains all different ways to compute. example:
+// "MS"_("bl") would ordinarily be ("SS(Bl)")/(l-1), but we could also write it as F_("bl") times "MSE", or as ("SS(Bl)")/("MS(Tr)") times ("MS(Tr)")/(l-1) etc. This would be a good way to show how the different formulas are all related and can be used to compute each other by hand.
 
 = The general linear model (GLM)
 
@@ -1389,7 +1392,7 @@ The slim table has one row per term. Replace each printed number with its symbol
       $hat(beta)_2 - t_(0.975) hat(sigma)_2$, $hat(beta)_2 + t_(0.975) hat(sigma)_2$,
   )
 ]
-
+ // TODO: Replace stupid OLS table with actual markdown returned by python code calling it.
 Footer entries printed below the coefficient block:
 
 #block(width: 100%)[
@@ -1488,6 +1491,7 @@ The denominator uses the *pooled* $hat(p)$ — not the individual $hat(p)_i$ —
 
 
 // TODO: Docs for all the python functions.
+// explaining things such as their distrubutions, and different usecases. I.E. make it usable for exam style questions
 
 // TODO: Better explanations
 
