@@ -1491,4 +1491,4 @@ The denominator uses the *pooled* $hat(p)$ — not the individual $hat(p)_i$ —
 
 // TODO: Better explanations
 
-// TODO: All the plots and explanations
+// TODO: All the plots and explanations; Generate each type of plot seen, and add explanations to it
