@@ -1,7 +1,11 @@
 #import "@preview/glossarium:0.5.10": gls, glspl, make-glossary, register-glossary, print-glossary
+#import "glossary.typ": glossary-entries
 #import "template.typ": *
 #import "colors.typ": *
 #import "util.typ": grid_figure, ma
+
+#show: make-glossary
+#register-glossary(glossary-entries)
 
 #show: template.with(logo: "Blue_CMYK.png", title: "Formulas", draft: false, authors: (
   (name: "Pedersen, Mikkel M.H.", id: "s255015"),
