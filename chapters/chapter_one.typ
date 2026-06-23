@@ -1606,3 +1606,5 @@ Common calls and their meaning:
 == Reading plots on the exam
 
 When the exam shows a plot image or the code that produces one, identify: (1) the plot type, (2) the distribution shape, (3) any model violations.
+
+// TODO: Add mean and variance estimate calculations from chapter 7 regarding propotions
