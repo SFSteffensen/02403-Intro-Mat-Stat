@@ -1,5 +1,7 @@
 #import "../util.typ": *
 #import "@preview/physica:0.9.8": *
+#import "@preview/glossarium:0.5.10": print-glossary
+#import "../glossary.typ": glossary-entries
 
 #set math.equation(numbering: none)
 
@@ -887,7 +889,7 @@ Functions in `scipy.stats.f`:
   [*4.10 Two-sample CI for a feature comparison $theta_1 - theta_2$ by parametric
    bootstrap.*],
   [1. Simulate $k$ sets of 2 samples.\
-   2. Compute $hat(theta)^*_(x k) - hat(theta)^*_(y k)$.\We have our null-hupothesis of there being no differene. Since both p-values are greater than 0.05, we can accept that hypothesis.
+   2. Compute $hat(theta)^*_(x k) - hat(theta)^*_(y k)$.\
    3. CI: $[q^*_(100(alpha/2)%), q^*_(100(1-alpha/2)%)]$],
   [—],
   [Not feasible — requires simulation.],
@@ -1124,8 +1126,7 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   $ overline(y)_i - overline(y)_j plus.minus t_(1-alpha/2)
       sqrt(("SSE")/(n-k)(1/n_i + 1/n_j)) $,
   [—],
-  [With MSE and the group sizes, key the interval by hand (`[√]`); $t$ from a table
-   (use $alpha\/M$).], // The TI explanations here are fuckjing cancer and need to be fixed
+  [Get $overline(y)_i, overline(y)_j$ from `1-Var Stats` per group. Read $"MSE" = "SSE"\/(n-k)$ from the ANOVA table. Key: $overline(y)_i - overline(y)_j plus.minus t_(1-alpha_B\/2) sqrt("MSE"(1\/n_i + 1\/n_j))$ (`[√]`); $t$ from $t(n-k)$ with $alpha_B = alpha\/M$.],
 
   [*8.10 Post-hoc pairwise hypothesis tests.* $H_0: mu_i = mu_j$ vs.
    $H_1: mu_i eq.not mu_j$. Test $M = k(k-1)/2$ times with
@@ -1186,7 +1187,30 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   )
 ]
 
-// TODO: 2nd one-way ANOVA table but where each cell contains all different ways to compute. 
+// TODO: 2nd one-way ANOVA table but where each cell contains all different ways to compute.
+
+*Reverse-engineering the one-way ANOVA table.* Any two independent cells determine the rest:
+
+#block(width: 100%)[
+  #set text(size: 9pt)
+  #table(
+    columns: (auto, 1.3fr, 1.5fr),
+    align: (left, left, left),
+    inset: 6pt,
+    stroke: 0.5pt + luma(60%),
+    fill: (_, y) => if y == 0 { luma(235) },
+    table.header([*Cell*], [*Standard formula*], [*Useful alternative(s)*]),
+    [SS(Tr)], $sum_i n_i (overline(y)_i - overline(y))^2$,
+      $"SST" - "SSE"; quad F dot (k-1) dot "MSE"$,
+    [SSE],    $sum_i (n_i - 1) s_i^2$,
+      $"SST" - "SS(Tr)"; quad "MSE" dot (n-k)$,
+    [SST],    $"SSE" + "SS(Tr)"$,
+      $sum_i sum_j (y_(i j) - overline(y))^2$,
+    [MS(Tr)], $"SS(Tr)"\/(k-1)$, $F dot "MSE"$,
+    [MSE],    $"SSE"\/(n-k)$, $"MS(Tr)"\/F$,
+    [$F_"obs"$], $"MS(Tr)"\/"MSE"$, [—],
+  )
+]
 
 == Two-way ANOVA table
 
@@ -1215,6 +1239,34 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
 
 // TODO: 2nd 2-way ANOVA table but where each cell contains all different ways to compute. example:
 // "MS"_("bl") would ordinarily be ("SS(Bl)")/(l-1), but we could also write it as F_("bl") times "MSE", or as ("SS(Bl)")/("MS(Tr)") times ("MS(Tr)")/(l-1) etc. This would be a good way to show how the different formulas are all related and can be used to compute each other by hand.
+
+*Reverse-engineering the two-way ANOVA table.* Given SS(Tr), SS(Bl), and SSE (or MSE), every other cell follows:
+
+#block(width: 100%)[
+  #set text(size: 9pt)
+  #table(
+    columns: (auto, 1.2fr, 1.6fr),
+    align: (left, left, left),
+    inset: 6pt,
+    stroke: 0.5pt + luma(60%),
+    fill: (_, y) => if y == 0 { luma(235) },
+    table.header([*Cell*], [*Standard formula*], [*Useful alternative(s)*]),
+    [SS(Tr)], $l dot sum_i hat(alpha)_i^2$,
+      $"SST" - "SSE" - "SS(Bl)"; quad F_"Tr" dot (k-1) dot "MSE"$,
+    [SS(Bl)], $k dot sum_j hat(beta)_j^2$,
+      $"SST" - "SSE" - "SS(Tr)"; quad F_"Bl" dot (l-1) dot "MSE"$,
+    [SSE], $"SST" - "SS(Tr)" - "SS(Bl)"$,
+      $"MSE" dot (k-1)(l-1)$,
+    [SST], $"SSE" + "SS(Tr)" + "SS(Bl)"$,
+      $sum_i sum_j (y_(i j) - overline(overline(y)))^2$,
+    [MS(Tr)], $"SS(Tr)"\/(k-1)$, $F_"Tr" dot "MSE"$,
+    [MS(Bl)], $"SS(Bl)"\/(l-1)$, $F_"Bl" dot "MSE"$,
+    [MSE $= hat(sigma)^2$], $"SSE"\/((k-1)(l-1))$,
+      $"MS(Tr)"\/F_"Tr"; quad "MS(Bl)"\/F_"Bl"$,
+    [$F_"Tr"$], $"MS(Tr)"\/"MSE"$, [—],
+    [$F_"Bl"$], $"MS(Bl)"\/"MSE"$, [—],
+  )
+]
 
 = The general linear model (GLM)
 
@@ -1298,39 +1350,9 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
 
 = Glossary // TODO: use GLossarium
 
-/ Cumulated distribution function (cdf) [Fordelingsfunktion]: Determines the
-  probability of observing an outcome of a random variable below a given value.
-/ Confidence interval [Konfidensinterval]: Handles uncertainty via probability
-  theory; the values of the unknown population mean $mu$ believed plausible given
-  the data.
-/ Continuous random variable [Kontinuert stokastisk variabel]: Represents an
-  outcome taking a continuous value (distance, temperature, weight, …).
-/ Correlation [Korrelation]: Summary statistic quantifying the (linear) strength
-  of relation between two related sets of observations.
-/ Covariance [Kovarians]: Summary statistic quantifying the (linear) strength of
-  relation between two related sets of observations.
-/ F-distribution [F-fordelingen]: Appears as the ratio between two independent
-  $chi^2$-distributed random variables.
-/ Inter Quartile Range (IQR) [Interkvartil bredde]: The middle 50% range of data.
-/ Median [Median, stikprøvemedian]: The median of a population or sample.
-/ Probability density function (pdf): Determines the probability of every
-  possible outcome of a random variable.
-/ Quantile [Fraktil, stikprøvefraktil]: The quantiles of a population or sample.
-/ Quartile [Fraktil, stikprøvefraktil]: The quartiles of a population or sample.
-/ Sample variance [Empirisk varians, stikprøvevarians]: The empirical variance of a sample.
-/ Sample mean [Stikprøvegennemsnit]: The average of a sample.
-/ Standard deviation [Standardafvigelse]: The square root of the variance.
+#print-glossary(glossary-entries, show-all: true, disable-back-references: true)
 
-= Acronyms
-
-/ ANOVA: Analysis of Variance
-/ cdf: cumulated distribution function
-/ CI: confidence interval
-/ CLT: Central Limit Theorem
-/ IQR: Inter Quartile Range
-/ LSD: Least Significant Difference
-/ pdf: probability density function
-
+= Appendix
 
 == Functions of normal RVs — exam recipes (Q29/Q30 type)
 
@@ -1367,32 +1389,45 @@ with $T tilde t(5)$. Then $P(T < a sqrt(5)) = 0.95 => a = t_(0.95)(5)\/sqrt(5)$.
 
 == OLS `summary(slim=True)` — annotated
 
-The slim table has one row per term. Replace each printed number with its symbol:
+What `print(linfit.summary(slim=True))` actually outputs (two-predictor example):
+
+```
+                         OLS Regression Results
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.942
+Model:                            OLS   Adj. R-squared:                  0.936
+No. Observations:                  25   F-statistic:                     152.3
+Df Residuals:                      22   Prob (F-statistic):           4.23e-13
+Df Model:                           2
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      1.2345      0.456      2.709      0.013       0.289       2.180
+x1             0.5678      0.089      6.379      0.000       0.384       0.752
+x2            -0.2341      0.112     -2.090      0.049      -0.466      -0.002
+==============================================================================
+```
+
+Column mapping for the coefficient block:
 
 #block(width: 100%)[
   #set text(size: 9pt)
   #table(
-    columns: (auto, auto, auto, auto, auto, auto, auto),
-    align: (left, center, center, center, center, center, center),
+    columns: (auto, auto, 1fr),
+    align: (left, left, left),
     inset: 6pt,
     stroke: 0.5pt + luma(60%),
     fill: (_, y) => if y == 0 { luma(235) },
-    table.header(
-      [*`(term)`*], [*`coef`*], [*`std err`*], [*`t`*], [*`P>|t|`*],
-      [*`[0.025`*], [*`0.975]`*],
-    ),
-    [`Intercept`],
-      $hat(beta)_0$, $hat(sigma)_(hat(beta)_0)$, $t_("obs",0)$, $p_0$,
-      $hat(beta)_0 - t_(0.975) hat(sigma)_0$, $hat(beta)_0 + t_(0.975) hat(sigma)_0$,
-    [`x1`],
-      $hat(beta)_1$, $hat(sigma)_(hat(beta)_1)$, $t_("obs",1)$, $p_1$,
-      $hat(beta)_1 - t_(0.975) hat(sigma)_1$, $hat(beta)_1 + t_(0.975) hat(sigma)_1$,
-    [`x2`],
-      $hat(beta)_2$, $hat(sigma)_(hat(beta)_2)$, $t_("obs",2)$, $p_2$,
-      $hat(beta)_2 - t_(0.975) hat(sigma)_2$, $hat(beta)_2 + t_(0.975) hat(sigma)_2$,
+    table.header([*Column*], [*Symbol*], [*Formula / meaning*]),
+    [`coef` (row $x_j$)], $hat(beta)_j$, [LS estimate of $beta_j$; `Intercept` row $-> hat(beta)_0$],
+    [`std err`], $hat(sigma)_(hat(beta)_j)$, [$hat(sigma) sqrt([(bold(X)^T bold(X))^(-1)]_(j j))$],
+    [`t`], $t_("obs",j)$, [$hat(beta)_j \/ hat(sigma)_(hat(beta)_j)$ — tests $H_0: beta_j = 0$],
+    [`P>|t|`], $p_j$, [two-sided $p$-value $= 2 P(T > |t_("obs",j)|)$, df $= n-p$ (Df Residuals)],
+    [`[0.025`], [lower 95% CI bound], [$hat(beta)_j - t_(0.975)(n-p) hat(sigma)_(hat(beta)_j)$],
+    [`0.975]`], [upper 95% CI bound], [$hat(beta)_j + t_(0.975)(n-p) hat(sigma)_(hat(beta)_j)$],
   )
 ]
- // TODO: Replace stupid OLS table with actual markdown returned by python code calling it.
+// TODO: Replace stupid OLS table with actual markdown returned by python code calling it.
 Footer entries printed below the coefficient block:
 
 #block(width: 100%)[
@@ -1496,3 +1531,78 @@ The denominator uses the *pooled* $hat(p)$ — not the individual $hat(p)_i$ —
 // TODO: Better explanations
 
 // TODO: All the plots and explanations; Generate each type of plot seen, and add explanations to it
+
+== Scipy function patterns — recognition
+
+The exam never requires writing code, but may show a snippet and ask what it computes.
+Five call patterns appear for every distribution:
+
+#block(width: 100%)[
+  #set text(size: 9pt)
+  #table(
+    columns: (auto, auto, 1fr),
+    align: (left, left, left),
+    inset: 6pt,
+    stroke: 0.5pt + luma(60%),
+    fill: (_, y) => if y == 0 { luma(235) },
+    table.header([*Pattern*], [*Returns*], [*What the exam may ask*]),
+    [`dist.rvs(params, size=k)`],
+      [Array of $k$ random draws],
+      [Which distribution / parameters does this simulate? Histogram shape follows the distribution.],
+    [`dist.pmf(k, params)` _(discrete only)_],
+      [$P(X = k)$],
+      [What exact probability is computed? Only valid for discrete distributions.],
+    [`dist.pdf(x, params)` _(continuous only)_],
+      [$f(x)$, density at $x$],
+      [Not a probability — it is the height of the density curve. $P(a<X<=b)$ requires the area $F(b)-F(a)$.],
+    [`dist.cdf(x, params)`],
+      [$P(X <= x)$],
+      [Cumulative probability. Use $F(b) - F(a)$ for $P(a < X <= b)$.],
+    [`dist.ppf(q, params)`],
+      [Quantile: smallest $x$ with $P(X <= x) = q$],
+      [Critical value / inverse cdf. `ppf(0.975)` $= z_(0.975) approx 1.96$.],
+  )
+]
+
+Common calls and their meaning:
+
+#block(width: 100%)[
+  #set text(size: 9pt)
+  #show raw: set text(size: 7.5pt)
+  #table(
+    columns: (1.9fr, 1fr),
+    align: (left, left),
+    inset: 5pt,
+    stroke: 0.5pt + luma(60%),
+    fill: (_, y) => if y == 0 { luma(235) },
+    table.header([*Call*], [*Computes*]),
+    [`stats.norm.cdf(x, loc=mu, scale=sigma)`],
+      [$P(X <= x)$ for $X tilde N(mu, sigma^2)$],
+    [`stats.norm.ppf(0.975)`],
+      [$z_(0.975) approx 1.96$],
+    [`stats.t.ppf(0.975, df=nu)`],
+      [$t_(0.975)$ with $nu$ df],
+    [`stats.chi2.ppf(0.95, df=nu)`],
+      [$chi^2_(0.95)$ with $nu$ df (upper 5% critical value)],
+    [`stats.f.ppf(0.95, dfn=nu1, dfd=nu2)`],
+      [$F_(0.95)$ with $(nu_1, nu_2)$ df],
+    [`stats.binom.pmf(k, n, p)`],
+      [$P(X = k)$ for $X tilde B(n, p)$],
+    [`stats.binom.cdf(k, n, p)`],
+      [$P(X <= k)$ for $X tilde B(n, p)$],
+    [`stats.poisson.pmf(k, mu=lam)`],
+      [$P(X = k)$ for $X tilde "Po"(lambda)$],
+    [`stats.expon.cdf(x, scale=1/lam)`],
+      [$F(x) = 1 - e^(-lambda x)$ for $X tilde "Exp"(lambda)$],
+    [`2*(1 - stats.t.cdf(abs(tobs), df=nu))`],
+      [Two-sided $p$-value for a $t$-test with observed $t_"obs"$],
+    [`2*(1 - stats.norm.cdf(abs(zobs)))`],
+      [Two-sided $p$-value for a $z$-test with observed $z_"obs"$],
+    [`stats.chi2_contingency(X, correction=False)`],
+      [$chi^2_"obs"$, $p$-value, df, and expected counts for an $r times c$ table],
+  )
+]
+
+== Reading plots on the exam
+
+When the exam shows a plot image or the code that produces one, identify: (1) the plot type, (2) the distribution shape, (3) any model violations.
