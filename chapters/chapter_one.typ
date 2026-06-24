@@ -998,7 +998,7 @@ worst-case (unknown $hat(p)$): $n = frac(1, 4)(z_(1-alpha/2)\/"ME")^2$.
 )
 ]
 
-To recover the slope by hand: $hat(beta)_1 = S_(x y) \/ S_(x x)$, and
+To recover the slope by hand: $hat(beta)_1 = S_(x y) / S_(x x)$, and
 $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
 
 = Inference for proportions
@@ -1378,7 +1378,7 @@ with the pooled $hat(p) = (x_1+x_2)\/(n_1+n_2)$ — this is what formula 7.18 us
   [Maps the matrix machinery onto the ANOVA table (df $k-1$ and $n-k$).],
 )
 
-= Glossary // TODO: use GLossarium
+= Glossary
 
 #print-glossary(glossary-entries, show-all: true, disable-back-references: true)
 
@@ -1440,6 +1440,8 @@ x2            -0.2341      0.112     -2.090      0.049      -0.466      -0.002
 ```
 
 Column mapping for the coefficient block:
+
+// TODO: remove this dumbass shit and replace it with actual formulas for each thing, like how to calculate beta_0, beta_1, etc. instead of just makiking a stupid useless table.
 
 #block(width: 100%)[
 #set text(size: 9pt)
@@ -1852,3 +1854,5 @@ When the exam shows a plot image or the code that produces one, identify: (1) th
 ]
 
 #figure(image("../figures/reading_ecdf.svg", width: 80%))
+
+// TODO: add big note that says when to reject or accept hypothesis depending on if p is bigger or less than alpha
