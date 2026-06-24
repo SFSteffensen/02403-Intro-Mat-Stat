@@ -1439,29 +1439,42 @@ x2            -0.2341      0.112     -2.090      0.049      -0.466      -0.002
 ==============================================================================
 ```
 
-*How each number in the coefficient block is computed:*
+Column mapping for the coefficient block ($p$ = Df Model + 1, $n-p$ = Df Residuals):
 
-*SLR* ($y_i = beta_0 + beta_1 x_i + epsilon_i$) — hand-computable:
-
-$ hat(beta)_1 = frac(S_(x y), S_(x x)) = frac(sum(x_i - overline(x))(y_i - overline(y)), sum(x_i - overline(x))^2), quad hat(beta)_0 = overline(y) - hat(beta)_1 overline(x) $
-
-$ "SSE" = S_(y y) - hat(beta)_1 S_(x y), quad hat(sigma)^2 = frac("SSE", n - 2) $
-
-*MLR* ($bold(Y) = bold(X) bold(beta) + bold(epsilon)$) — matrix form:
-
-$ hat(bold(beta)) = (bold(X)^T bold(X))^(-1) bold(X)^T bold(Y), quad hat(sigma)^2 = frac("SSE", n - p), quad "SSE" = bold(Y)^T (bold(I) - bold(H)) bold(Y) $
-
-where $p$ = number of columns in $bold(X)$ (= Df Model + 1) and $n - p$ = Df Residuals.
-
-*Standard error, t-statistic, p-value, and CI for each $hat(beta)_j$:*
-
-$ hat(sigma)_(hat(beta)_j) = hat(sigma) sqrt([(bold(X)^T bold(X))^(-1)]_(j j)) $
-
-$ t_("obs",j) = frac(hat(beta)_j, hat(sigma)_(hat(beta)_j)) tilde t(n - p) quad "under" H_0: beta_j = 0 $
-
-$ p"-value" = 2 P(T > |t_("obs",j)|), quad T tilde t(n - p) $
-
-$ "95% CI": quad hat(beta)_j plus.minus t_(0.975)(n - p) dot hat(sigma)_(hat(beta)_j) $
+#block(
+  width: 100%,
+)[
+#set text(size: 9pt)
+#table(
+  columns: (auto, auto, 1fr),
+  align: (left, left, left),
+  inset: 6pt,
+  stroke: 0.5pt + luma(60%),
+  fill: (_, y) => if y == 0 { luma(235) },
+  table.header([*Column*], [*Symbol*], [*Formula*]),
+  [`coef` — Intercept],
+  $hat(beta)_0$,
+  [$overline(y) - hat(beta)_1 overline(x)$ (SLR); #h(0.5em) $(bold(X)^T bold(X))^(-1) bold(X)^T bold(Y)$ entry 0 (MLR)],
+  [`coef` — $x_j$],
+  $hat(beta)_j$,
+  [$hat(beta)_1 = S_(x y)\/S_(x x)$ (SLR); #h(0.5em) $(bold(X)^T bold(X))^(-1) bold(X)^T bold(Y)$ entry $j$ (MLR)],
+  [`std err`],
+  $hat(sigma)_(hat(beta)_j)$,
+  [$hat(sigma) sqrt([(bold(X)^T bold(X))^(-1)]_(j j))$ #h(0.5em) where $hat(sigma)^2 = "SSE"\/(n-p)$],
+  [`t`],
+  $t_("obs",j)$,
+  [$hat(beta)_j \/ hat(sigma)_(hat(beta)_j)$ #h(0.5em) — reject $H_0: beta_j = 0$ if $|t_"obs"| > t_(0.975)(n-p)$],
+  [`P>|t|`],
+  $p_j$,
+  [$2 P(T > |t_("obs",j)|)$, #h(0.5em) $T tilde t(n-p)$],
+  [`[0.025`],
+  [lower 95% CI],
+  [$hat(beta)_j - t_(0.975)(n-p) dot hat(sigma)_(hat(beta)_j)$],
+  [`0.975]`],
+  [upper 95% CI],
+  [$hat(beta)_j + t_(0.975)(n-p) dot hat(sigma)_(hat(beta)_j)$],
+)
+]
 Footer entries printed below the coefficient block:
 
 #block(width: 100%)[
