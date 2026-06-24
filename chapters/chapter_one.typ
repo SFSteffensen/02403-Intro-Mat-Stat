@@ -787,6 +787,37 @@ Functions in `scipy.stats.f`:
   [Read $z_(1-beta), z_(1-alpha/2)$ from a $Z$-table; key the expression (`[x²]`).],
 )
 
+== Margin of error — quick reference
+
+The *margin of error* (ME) is the half-width of a confidence interval:
+$["estimate" - "ME", "estimate" + "ME"]$.
+
+#block(width: 100%)[
+  #set text(size: 9pt)
+  #table(
+    columns: (auto, 1fr, auto),
+    align: (left, left, left),
+    inset: 6pt,
+    stroke: 0.5pt + luma(60%),
+    fill: (_, y) => if y == 0 { luma(235) },
+    table.header([*Estimating*], [*Margin of error*], [*Reference*]),
+    [Mean $mu$ ($sigma$ unknown)],
+    $"ME" = t_(1-alpha\/2)(n-1) dot s\/sqrt(n)$,
+    [(3.9)],
+    [Mean $mu$ ($sigma$ known / large $n$)],
+    $"ME" = z_(1-alpha\/2) dot sigma\/sqrt(n)$,
+    [(3.63)],
+    [Proportion $p$],
+    $"ME" = z_(1-alpha\/2) dot sqrt(hat(p)(1-hat(p))\/n)$,
+    [(7.3)],
+  )
+]
+
+*Inverting for sample size.* Rearranging gives
+$n = (z_(1-alpha/2) sigma \/ "ME")^2$ (3.63); for a proportion
+$n = hat(p)(1-hat(p))(z_(1-alpha/2)\/"ME")^2$ (7.13);
+worst-case (unknown $hat(p)$): $n = frac(1, 4)(z_(1-alpha/2)\/"ME")^2$.
+
 = Simulation based statistics
 
 #st(
@@ -971,6 +1002,28 @@ To recover the slope by hand: $hat(beta)_1 = S_(x y) \/ S_(x x)$, and
 $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
 
 = Inference for proportions
+
+== Proportion estimator — mean and variance
+
+For $X tilde B(n, p)$ with $hat(p) = X\/n$:
+
+$ E[hat(p)] = p, quad
+V[hat(p)] = frac(p(1-p), n), quad
+"se"(hat(p)) = sqrt(frac(hat(p)(1-hat(p)), n)) $
+
+Under $H_0: p = p_0$ use $p_0$ in the SE (not $hat(p)$):
+
+$ "se"_0(hat(p)) = sqrt(frac(p_0(1-p_0), n)) $
+
+The difference $hat(p)_1 - hat(p)_2$ for two independent samples:
+
+$ E[hat(p)_1 - hat(p)_2] = p_1 - p_2, quad
+V[hat(p)_1 - hat(p)_2] = frac(p_1(1-p_1), n_1) + frac(p_2(1-p_2), n_2) $
+
+Under $H_0: p_1 = p_2 = p$ the variance becomes $p(1-p)(1\/n_1 + 1\/n_2)$, estimated
+with the pooled $hat(p) = (x_1+x_2)\/(n_1+n_2)$ — this is what formula 7.18 uses.
+
+== Formulas
 
 #st(
   [*7.3 Proportion estimate and confidence interval.*],
@@ -1799,54 +1852,3 @@ When the exam shows a plot image or the code that produces one, identify: (1) th
 ]
 
 #figure(image("../figures/reading_ecdf.svg", width: 80%))
-
-== Margin of error — quick reference
-
-The *margin of error* (ME) is the half-width of a confidence interval:
-$["estimate" - "ME", "estimate" + "ME"]$.
-
-#block(width: 100%)[
-  #set text(size: 9pt)
-  #table(
-    columns: (auto, 1fr, auto),
-    align: (left, left, left),
-    inset: 6pt,
-    stroke: 0.5pt + luma(60%),
-    fill: (_, y) => if y == 0 { luma(235) },
-    table.header([*Estimating*], [*Margin of error*], [*Reference*]),
-    [Mean $mu$ ($sigma$ unknown)],
-    $"ME" = t_(1-alpha\/2)(n-1) dot s\/sqrt(n)$,
-    [(3.9)],
-    [Mean $mu$ ($sigma$ known / large $n$)],
-    $"ME" = z_(1-alpha\/2) dot sigma\/sqrt(n)$,
-    [(3.63)],
-    [Proportion $p$],
-    $"ME" = z_(1-alpha\/2) dot sqrt(hat(p)(1-hat(p))\/n)$,
-    [(7.3)],
-  )
-]
-
-*Inverting for sample size.* Rearranging gives
-$n = (z_(1-alpha/2) sigma \/ "ME")^2$ (3.63); for a proportion
-$n = hat(p)(1-hat(p))(z_(1-alpha/2)\/"ME")^2$ (7.13);
-worst-case (unknown $hat(p)$): $n = frac(1, 4)(z_(1-alpha/2)\/"ME")^2$.
-
-== Proportion estimator — mean and variance
-
-For $X tilde B(n, p)$ with $hat(p) = X\/n$:
-
-$ E[hat(p)] = p, quad
-V[hat(p)] = frac(p(1-p), n), quad
-"se"(hat(p)) = sqrt(frac(hat(p)(1-hat(p)), n)) $
-
-Under $H_0: p = p_0$ use $p_0$ in the SE (not $hat(p)$):
-
-$ "se"_0(hat(p)) = sqrt(frac(p_0(1-p_0), n)) $
-
-The difference $hat(p)_1 - hat(p)_2$ for two independent samples:
-
-$ E[hat(p)_1 - hat(p)_2] = p_1 - p_2, quad
-V[hat(p)_1 - hat(p)_2] = frac(p_1(1-p_1), n_1) + frac(p_2(1-p_2), n_2) $
-
-Under $H_0: p_1 = p_2 = p$ the variance becomes $p(1-p)(1\/n_1 + 1\/n_2)$, estimated
-with the pooled $hat(p) = (x_1+x_2)\/(n_1+n_2)$ — this is what formula 7.18 uses.
