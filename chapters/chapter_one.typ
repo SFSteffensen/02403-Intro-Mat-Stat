@@ -12,9 +12,9 @@ distributions, which are listed together. An extra column has been added to
 every reference table with instructions for the *TI-30XB / TI-30XS MultiView*
 calculator where the operation is possible.
 
-Before running the Python, install the required packages (developed with
-`scipy` 1.15.3, check with `scipy.__version__`, upgrade with
-`pip install --upgrade scipy`). At the top of each script include:
+Before running the Python, install the required packages with UV:
+`uv add numpy pandas scipy matplotlib statsmodels`.
+At the top of each script include:
 
 ```python
 import numpy as np
@@ -23,6 +23,7 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 import statsmodels.formula.api as smf
 import statsmodels.api as sm
+import statsmodels.stats.power as smp
 import statsmodels.stats.proportion as smprop
 ```
 
@@ -1191,8 +1192,6 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
   )
 ]
 
-// TODO: 2nd one-way ANOVA table but where each cell contains all different ways to compute.
-
 *Reverse-engineering the one-way ANOVA table.* Any two independent cells determine the rest:
 
 #block(width: 100%)[
@@ -1240,9 +1239,6 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
     [Total], $n-1$, [SST], [], [], [],
   )
 ]
-
-// TODO: 2nd 2-way ANOVA table but where each cell contains all different ways to compute. example:
-// "MS"_("bl") would ordinarily be ("SS(Bl)")/(l-1), but we could also write it as F_("bl") times "MSE", or as ("SS(Bl)")/("MS(Tr)") times ("MS(Tr)")/(l-1) etc. This would be a good way to show how the different formulas are all related and can be used to compute each other by hand.
 
 *Reverse-engineering the two-way ANOVA table.* Given SS(Tr), SS(Bl), and SSE (or MSE), every other cell follows:
 
@@ -1431,7 +1427,6 @@ Column mapping for the coefficient block:
     [`0.975]`], [upper 95% CI bound], [$hat(beta)_j + t_(0.975)(n-p) hat(sigma)_(hat(beta)_j)$],
   )
 ]
-// TODO: Replace stupid OLS table with actual markdown returned by python code calling it.
 Footer entries printed below the coefficient block:
 
 #block(width: 100%)[
@@ -1529,13 +1524,6 @@ zobs, pval = smprop.proportions_ztest([x1, x2], [n1, n2], value=0)
 The denominator uses the *pooled* $hat(p)$ — not the individual $hat(p)_i$ — because $H_0$ asserts a common true proportion. This differs from the CI formula (Thm 7.15), which uses each group's own $hat(p)_i$.
 
 
-// TODO: Docs for all the python functions.
-// explaining things such as their distrubutions, and different usecases. I.E. make it usable for exam style questions
-
-// TODO: Better explanations
-
-// TODO: All the plots and explanations; Generate each type of plot seen, and add explanations to it
-
 == Scipy function patterns — recognition
 
 The exam never requires writing code, but may show a snippet and ask what it computes.
@@ -1611,6 +1599,113 @@ Common calls and their meaning:
 
 When the exam shows a plot image or the code that produces one, identify: (1) the plot type, (2) the distribution shape, (3) any model violations.
 
-// TODO: Add mean and variance estimate calculations from chapter 7 regarding propotions
-// TODO: we're missing ME = t_(i - alpha/2) (s)/(sqrt(n))
-// TODO: make different relevant python plots in python, and add them as SVG's, they need proper explanations, perhaps visualisations on how to see skewedness, and especially what different QQ-plots mean, and what you can infer from them.
+#block(width: 100%)[
+  #set text(size: 8.5pt)
+  #table(
+    columns: (auto, 1fr, 1fr, 1fr),
+    align: (left, left, left, left),
+    inset: 5pt,
+    stroke: 0.5pt + luma(60%),
+    fill: (col, row) => if row == 0 { luma(235) } else if col == 0 { luma(248) },
+    table.header(
+      [*Plot*], [*What it shows*], [*Healthy (assumptions met)*], [*Warning sign*],
+    ),
+    [*Histogram*],
+      [Distribution shape of the raw data or residuals],
+      [Bell-shaped, roughly symmetric — consistent with normality],
+      [Right/left skew; bimodal; hard cutoff at zero (→ exponential / lognormal)],
+    [*QQ-plot* (normal)],
+      [Normality: sample quantiles vs. theoretical normal quantiles],
+      [Points lie close to the diagonal reference line],
+      [Heavy tails: both ends curve *away* from the line; light tails: curve toward it; S-shape: skew],
+    [*Residuals vs. fitted*],
+      [Linearity + equal variance ($epsilon tilde N(0,sigma^2)$)],
+      [Random scatter around $y = 0$, constant spread across all fitted values],
+      [Fan/funnel shape → non-constant variance; curved band → non-linearity (add a polynomial term)],
+    [*Residuals vs. predictor $x_j$*],
+      [Whether the predictor is sufficiently captured by the current model],
+      [Random scatter around $y = 0$],
+      [U-shape / curvature → add $x_j^2$; wedge shape → transform $x_j$],
+    [*Box plots per group*],
+      [Equal variance across groups; outliers],
+      [Boxes of similar height (IQR); whiskers roughly equal length],
+      [Very different box heights → equal-variance assumption violated; extreme points → outliers],
+    [*ECDF*],
+      [Empirical CDF; jump heights equal each value's probability],
+      [Smooth S-curve (normal); straight diagonal (uniform); concave (exponential tail)],
+      [Unequal jump heights → non-uniform discrete; identify distribution from overall shape],
+  )
+]
+
+*Quick rules.* (1) A QQ-plot checks normality of *residuals*, not the raw $y$-values. (2) Residuals vs. fitted checks linearity and equal variance — *not* independence (independence cannot be assessed from these plots). (3) In a box-plot comparison, roughly equal IQR widths (box heights) is the equal-variance check for one-way ANOVA.
+
+*Histogram shapes*
+
+#figure(image("../figures/reading_hist.svg", width: 100%))
+
+*Normal QQ-plots — how to read them*
+
+#figure(image("../figures/reading_qq.svg", width: 95%))
+
+*Residuals vs. fitted — three scenarios*
+
+#figure(image("../figures/reading_resid.svg", width: 95%))
+
+*Box plots — ANOVA equal-variance check*
+
+#figure(image("../figures/reading_box.svg", width: 80%))
+
+*ECDF — reading jump heights and overall shape*
+
+#figure(image("../figures/reading_ecdf.svg", width: 80%))
+
+== Margin of error — quick reference
+
+The *margin of error* (ME) is the half-width of a confidence interval:
+$["estimate" - "ME", "estimate" + "ME"]$.
+
+#block(width: 100%)[
+  #set text(size: 9pt)
+  #table(
+    columns: (auto, 1fr, auto),
+    align: (left, left, left),
+    inset: 6pt,
+    stroke: 0.5pt + luma(60%),
+    fill: (_, y) => if y == 0 { luma(235) },
+    table.header([*Estimating*], [*Margin of error*], [*Reference*]),
+    [Mean $mu$ ($sigma$ unknown)],
+      $"ME" = t_(1-alpha\/2)(n-1) dot s\/sqrt(n)$,
+      [(3.9)],
+    [Mean $mu$ ($sigma$ known / large $n$)],
+      $"ME" = z_(1-alpha\/2) dot sigma\/sqrt(n)$,
+      [(3.63)],
+    [Proportion $p$],
+      $"ME" = z_(1-alpha\/2) dot sqrt(hat(p)(1-hat(p))\/n)$,
+      [(7.3)],
+  )
+]
+
+*Inverting for sample size.* Rearranging gives
+$n = (z_(1-alpha/2) sigma \/ "ME")^2$ (3.63); for a proportion
+$n = hat(p)(1-hat(p))(z_(1-alpha/2)\/"ME")^2$ (7.13);
+worst-case (unknown $hat(p)$): $n = frac(1, 4)(z_(1-alpha/2)\/"ME")^2$.
+
+== Proportion estimator — mean and variance
+
+For $X tilde B(n, p)$ with $hat(p) = X\/n$:
+
+$ E[hat(p)] = p, quad
+  V[hat(p)] = frac(p(1-p), n), quad
+  "se"(hat(p)) = sqrt(frac(hat(p)(1-hat(p)), n)) $
+
+Under $H_0: p = p_0$ use $p_0$ in the SE (not $hat(p)$):
+
+$ "se"_0(hat(p)) = sqrt(frac(p_0(1-p_0), n)) $
+
+The difference $hat(p)_1 - hat(p)_2$ for two independent samples:
+
+$ E[hat(p)_1 - hat(p)_2] = p_1 - p_2, quad
+  V[hat(p)_1 - hat(p)_2] = frac(p_1(1-p_1), n_1) + frac(p_2(1-p_2), n_2) $
+
+Under $H_0: p_1 = p_2 = p$ the variance becomes $p(1-p)(1\/n_1 + 1\/n_2)$, estimated
+with the pooled $hat(p) = (x_1+x_2)\/(n_1+n_2)$ — this is what formula 7.18 uses.
