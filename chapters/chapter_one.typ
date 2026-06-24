@@ -1034,7 +1034,9 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
 #st(
   [*7.3 Proportion estimate and confidence interval.*],
   $ hat(p) = x/n, quad
-    hat(p) plus.minus z_(1-alpha/2) sqrt((hat(p)(1 - hat(p)))/n) $,
+    hat(p) plus.minus z_(1-alpha/2) sqrt((hat(p)(1 - hat(p)))/n) \
+    "se" = sqrt((hat(p)(1 - hat(p)))/n)
+  $,
   [—],
   [Key $hat(p) = frac(x, n)$; then the interval (`[√]`); $z_(1-alpha/2)$ from a
    $Z$-table.],
@@ -1048,7 +1050,9 @@ $hat(beta)_0 = overline(y) - hat(beta)_1 overline(x)$.
    $H_1: p eq.not p_0$.],
   $ p"-value" = 2 dot P(Z > |z_("obs")|), quad Z tilde N(0, 1^2) $,
   [#cmd("zobs, pval = smprop.proportions_ztest(x, n, value=0.5, prop_var=0.5)")],
-  [$z_("obs")$ as in 7.10 by hand; $p$-value from a $Z$-table.],
+  [Key $z_("obs") = frac(hat(p) - p_0, sqrt(p_0(1-p_0)\/n))$ —
+ use $p_0$ (not $hat(p)$) in the denominator; $p$-value from $Z$-table
+ or bound via $z_(0.975) = 1.96$ (reject if $|z_("obs")| > 1.96$ at $alpha=0.05$).],
 
   [*7.13 Sample-size formula for the CI of a proportion.*],
   $ "guessed " p: & quad n = p(1 - p)(z_(1-alpha/2)/"ME")^2 \
@@ -1608,3 +1612,5 @@ Common calls and their meaning:
 When the exam shows a plot image or the code that produces one, identify: (1) the plot type, (2) the distribution shape, (3) any model violations.
 
 // TODO: Add mean and variance estimate calculations from chapter 7 regarding propotions
+// TODO: we're missing ME = t_(i - alpha/2) (s)/(sqrt(n))
+// TODO: make different relevant python plots in python, and add them as SVG's, they need proper explanations, perhaps visualisations on how to see skewedness, and especially what different QQ-plots mean, and what you can infer from them.
